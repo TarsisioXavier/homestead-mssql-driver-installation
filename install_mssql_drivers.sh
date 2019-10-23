@@ -3,16 +3,12 @@
 # | ============================================================================
 # | ADD THE MICROSOFT REPOSITORY INTO SOURCES
 # | ============================================================================
-echo "Registring Microsoft's GPG key"
 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 curl https://packages.microsoft.com/config/ubuntu/18.10/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
 # | Update packages to install dependencies
 # | ---------------------------------------
-echo "Updating repositories"
 apt-get update
-
-echo "Installing drivers' packages dependencies"
 ACCEPT_EULA=Y apt-get install msodbcsql17
 ACCEPT_EULA=Y apt-get install mssql-tools
 apt -fy install unixodbc unixodbc-dev
@@ -31,7 +27,6 @@ ln -s /opt/mssql-tools/bin/bcp /usr/bin/bcp
 mkdir /tmp/mssql
 cd /tmp/mssql
 
-echo "Downloading drivers"
 wget https://pecl.php.net/get/sqlsrv-5.6.1.tgz
 wget https://pecl.php.net/get/pdo_sqlsrv-5.6.1.tgz
 
@@ -40,7 +35,6 @@ wget https://pecl.php.net/get/pdo_sqlsrv-5.6.1.tgz
 # | ----------------------------------------------------------------------------
 for version in 7.1 7.2 7.3; do
     if phpize$version -v >> /dev/null; then
-        echo "Installing drivers for PHP $version"
         tar -xvzf ./sqlsrv-5.6.1.tgz
         cd /tmp/mssql/sqlsrv-5.6.1
 
@@ -89,6 +83,5 @@ done
 
 # | Remove temporary folder
 # | -----------------------
-echo "Removing temporary folder"
 cd ~/
 rm -r /tmp/mssql
